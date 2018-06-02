@@ -1,75 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<?php session_start();?>
-	<title>tfidf</title>
-	<style>
-		/*style to top btn*/
-		#topBtn {
-		    display: none; /* Hidden by default */
-		    position: fixed; /* Fixed/sticky position */
-		    bottom: 20px; /* Place the button at the bottom of the page */
-		    right: 30px; /* Place the button 30px from the right */
-		    z-index: 99; /* Make sure it does not overlap */
-		    border: none; /* Remove borders */
-		    outline: none; /* Remove outline */
-		    background-color: red; /* Set a background color */
-		    color: white; /* Text color */
-		    cursor: pointer; /* Add a mouse pointer on hover */
-		    padding: 15px; /* Some padding */
-		    border-radius: 10px; /* Rounded corners */
-		    font-size: 18px; /* Increase font size */
-		}
-
-		#topBtn:hover {
-		    background-color: #555; /* Add a dark-grey background on hover */
-		}
-	</style>
-	<script>
-		// When the user scrolls down 20px from the top of the document, show the button
-		window.onscroll = function() {scrollFunction()};
-
-		function scrollFunction() {
-		    if (document.body.scrollTop >20 || document.documentElement.scrollTop >20) {
-		        document.getElementById("topBtn").style.display = "block";
-		    } else {
-		        document.getElementById("topBtn").style.display = "none";
-		    }
-		}
-
-		// When the user clicks on the button, scroll to the top of the document
-		function topFunction() {
-		    document.body.scrollTop = 0; // For Safari
-		    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-		}
-	</script>
+	<?php include('menu.php');?>
+	<title>TFIDF</title>
 </head>
 <body>
 	<a href="index.php">&nbsp;Home</a>&nbsp;&nbsp;>
+	<a href="preprocess.php">&nbsp;Terms List</a>&nbsp;&nbsp;>
 	<a href="tfidf.php">&nbsp;TFIDF</a>&nbsp;&nbsp;
+	<br><br>
 	<?php
 		$doc_arr_str=$_SESSION['doc_arr_str'];
 		$doc_arr_arr=$_SESSION['doc_arr_arr'];
-		$str_all=$_SESSION['string_all'];
-		$arr_terms=$_SESSION['array_terms'];
-		$str_terms=$_SESSION['string_terms'];
+		$str_all=$_SESSION['str_all'];
+		$arr_terms=$_SESSION['arr_terms'];
+		$str_terms=$_SESSION['str_terms'];
 	?>
 	<button onclick="topFunction()" id="topBtn" title="Go to top">Top</button>
 	<ol><li><a href='#tf'>tf</a></li>
 		<li><a href='#idf'>idf</a></li>
 		<li><a href='#tfidf'>tfidf</a></li>
 	</ol>
-
-	<br>
+	
 	<ol><b><li id='tf'>tf</li></b>
 		<table border="1">
 			<thead><tr>
 				<td>Number</td><td>Vocabulary</td>
-				<td>Document 1</td><td>Document 2</td>
-				<td>Document 3</td><td>Document 4</td>
-				<td>Document 5</td><td>Document 6</td>
-				<td>Document 7</td><td>Document 8</td>
-				<td>Document 9</td><td>Document 10</td>
+				<td>Document 1</td><td>Document 2</td><td>Document 3</td><td>Document 4</td><td>Document 5</td>
+				<td>Document 6</td><td>Document 7</td><td>Document 8</td><td>Document 9</td><td>Document 10</td>
 			</tr></thead>
 			<?php for($i=0,$no=1; $i<sizeof($arr_terms); $i++,$no++){?>
 				<tr>
@@ -123,7 +81,7 @@
 							echo $idf[$i];
 						}
 						else{
-							$idf[$i]=number_format(0, 0);
+							$idf[$i]=0;
 							echo $idf[$i];
 						}
 					?></td>
@@ -152,17 +110,28 @@
 							if($tfidf[$i][$j]>0){
 								echo $tfidf[$i][$j];
 							}
-							else
+							else{
+								$tfidf[$i][$j]=number_format(0, 0);
 								echo '-';
+							}
 						?></td>
 					<?php } ?>
 				</tr>
 			<?php } 
-				$_SESSION['tf']=$tf;
-				$_SESSION['idf']=$idf;
-				$_SESSION['tfidf']=$tfidf;
 			?>
 		</table>
 	</ol>
+	<?php
+		//transpose tf&tfidf into [doc][term]
+		array_unshift($tf, null);
+		$tf_trans=call_user_func_array('array_map', $tf);
+		array_unshift($tfidf, null);
+		$tfidf_trans=call_user_func_array('array_map', $tfidf);
+
+		//store into session
+		$_SESSION['tf']=$tf_trans;
+		$_SESSION['idf']=$idf;
+		$_SESSION['tfidf']=$tfidf_trans;
+	?>
 </body>
 </html>

@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<?php
-	session_start();
-	include('class.pdf2text.php');
+	<?php 
+		include('menu.php');
+		include('class.pdf2text.php');
 	?>
-	<title></title>
+	<title>Terms List</title>
 </head>
 <body>
+	<a href="index.php">&nbsp;Home</a>&nbsp;&nbsp;>
+	<a href="preprocess.php">&nbsp;Terms List</a>&nbsp;&nbsp;
+	<br><br>
+	<button onclick="topFunction()" id="topBtn" title="Go to top">Top</button>
 	<?php
 		//process directory&get file
-		$submit_directory=isset($_POST['submit_directory']) ? $_POST['submit_directory'] : NULL;
-		if($submit_directory!=NULL){
-			$directory=$_POST['directory'];
-			for($i=1,$f=0; $i<=10; $i++,$f++){
-				$a = new PDF2Text();
-				$a->setFilename($directory.'/P'.$i.'.pdf');
-				$a->decodePDF();
-				//save pdf into array
-				$files_ori[$f]=$a->output();
-			}
+		$directory=$_POST['directory'];
+		$_SESSION['directory']=$directory;
+		//get files content
+		for($i=1,$f=0; $i<=10; $i++,$f++){
+			$a = new PDF2Text();
+			$a->setFilename($directory.'/P'.$i.'.pdf');
+			$a->decodePDF();
+			//save pdf into array
+			$files_ori[$f]=$a->output();
 		}
 
 		//process regular expression
@@ -37,7 +40,7 @@
 			echo '<br><br>';
 */			
 
-			switch ($f) {
+			switch($f){
 				case 0://P1.pdf
 					$arr=explode(' ', $str2);
 					$arr[145]='kampung';
@@ -175,17 +178,16 @@
 		$arr_terms=explode(' ', $str_terms);
 		//print_r($arr_terms);
 		
-		$_SESSION['string_all']=$str_all;
-		$_SESSION['array_terms']=$arr_terms;
-		$_SESSION['string_terms']=$str_terms;
+		$_SESSION['str_all']=$str_all;
+		$_SESSION['arr_terms']=$arr_terms;
+		$_SESSION['str_terms']=$str_terms;
 		//asort($arr_terms);
 		//print_r($arr_terms);
 		for($i=0,$no=1; $i<sizeof($arr_terms); $i++,$no++){
 			echo $no."= ".$arr_terms[$i]."<br>";
 		}
 
-	echo "<script>location.href='index.php';</script>";
-		
+	//echo "<script>location.href='index.php';</script>";
 	?>
 </body>
 </html>
