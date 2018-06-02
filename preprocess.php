@@ -14,7 +14,7 @@
 	<button onclick="topFunction()" id="topBtn" title="Go to top">Top</button>
 	<?php
 		//process directory&get file
-		$directory=$_POST['directory'];
+		$directory=isset($_POST['directory'])?$_POST['directory']:$_SESSION['directory'];
 		$_SESSION['directory']=$directory;
 		//get files content
 		for($i=1,$f=0; $i<=10; $i++,$f++){

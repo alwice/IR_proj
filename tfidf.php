@@ -24,11 +24,11 @@
 	
 	<ol><b><li id='tf'>tf</li></b>
 		<table border="1">
-			<thead><tr>
+			<thead>
 				<td>Number</td><td>Vocabulary</td>
 				<td>Document 1</td><td>Document 2</td><td>Document 3</td><td>Document 4</td><td>Document 5</td>
 				<td>Document 6</td><td>Document 7</td><td>Document 8</td><td>Document 9</td><td>Document 10</td>
-			</tr></thead>
+			</thead>
 			<?php for($i=0,$no=1; $i<sizeof($arr_terms); $i++,$no++){?>
 				<tr>
 					<td><?php echo $no;?></td>
@@ -60,10 +60,10 @@
 		<br>
 		<b><li id='idf'>idf</li></b>
 		<table border="1">
-			<thead><tr>
+			<thead>
 				<td>Number</td><td>Terms</td>
 				<td>n</td><td>idf</td>
-			</tr></thead>
+			</thead>
 			<?php for($i=0,$no=1; $i<sizeof($arr_terms); $i++,$no++){?>
 				<tr>
 					<td><?php echo $no;?></td>
@@ -76,8 +76,8 @@
 						} 
 						echo $existedDocHz[$i];?></td>
 					<td><?php 
-						if($existedDocHz[$i]<10){
-							$idf[$i]=number_format(log(10/$existedDocHz[$i],2), 3, '.', ',');
+						if($existedDocHz[$i]<sizeof($doc_arr_str)){
+							$idf[$i]=number_format(log(sizeof($doc_arr_str)/$existedDocHz[$i],2), 3, '.', ',');
 							echo $idf[$i];
 						}
 						else{
@@ -92,14 +92,14 @@
 		<br>
 		<b><li id='tfidf'>tfidf</li></b>
 		<table border="1">
-			<thead><tr>
+			<thead>
 				<td>Number</td><td>Terms</td>
 				<td>Document 1</td><td>Document 2</td>
 				<td>Document 3</td><td>Document 4</td>
 				<td>Document 5</td><td>Document 6</td>
 				<td>Document 7</td><td>Document 8</td>
 				<td>Document 9</td><td>Document 10</td>
-			</tr></thead>
+			</thead>
 			<?php for($i=0,$no=1; $i<sizeof($arr_terms); $i++,$no++){?>
 				<tr>
 					<td><?php echo $no;?></td>

@@ -6,7 +6,7 @@
 </head>
 <body>
 	<a href="index.php">&nbsp;Home</a>&nbsp;&nbsp;>
-	<a href="query.php">&nbsp;Query tfidf</a>&nbsp;&nbsp;
+	<a href="query_tfidf.php">&nbsp;Query tfidf</a>&nbsp;&nbsp;
 	<br><br>
 	<?php
 		//load session
@@ -23,7 +23,7 @@
 	
 	<?php
 		//process query
-		$str_query=$_POST['query'];
+		$str_query=isset($_POST['query'])?$_POST['query']:$_SESSION['str_query'];
 		$_SESSION['str_query']=$str_query;
 		$arr_query=explode(' ', $str_query);
 		$arr_unique_query=explode(' ', implode(' ', array_unique($arr_query)));
