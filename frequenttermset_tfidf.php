@@ -74,7 +74,9 @@
 			$termset_hz[$i]=$calc_docs;
 		}
 		//delete empty termset
-		$termset_new_key=array_diff($termset_hz,[0]);
+		$termset_temp_hz=$termset_new_key=array_diff($termset_hz,[0]);
+		$termset_temp_hz=array_values($termset_temp_hz);
+		
 		for($t=$threshold-1; $t>0; $t--){
 			$termset_new_key=array_diff($termset_new_key,[$t]);	
 		}
@@ -117,6 +119,34 @@
 	<br>
 
 	<?php
+		//for 1t query
+		for($k=0; $k<sizeof($arr_unique_query); $k++){
+			//tf for 1t query 
+			$hz1t[$k]=0;
+			if(in_array($arr_unique_query[$k], $arr_unique_query)){
+				$tmp=array_count_values($arr_unique_query);
+				$hz1t[$k]=$tmp[$arr_unique_query[$k]];
+			}
+			$freq_ft1t_query[$k]=$hz1t[$k];
+			if($freq_ft1t_query[$k]>0){
+				$tf_ft1t_query[$k]=number_format(1+log($freq_ft1t_query[$k],2), 3, '.', ',');
+			}
+			else{
+				$tf_ft1t_query[$k]=0;
+			}
+			
+			//idf for 1t doc & query
+			if($termset_temp_hz[$k]<sizeof($doc_arr_str)){
+				$idf_ft1t[$k]=number_format(log(1+sizeof($doc_arr_str)/$termset_temp_hz[$k],2), 3, '.', ',');
+			}
+			else{
+				$idf_ft1t[$k]=0;
+			}
+		
+			//weight for 1t query 
+			$tfidf_ft1t_query[$k]=number_format($tf_ft1t_query[$k]*$idf_ft1t[$k], 3, '.', ',');
+		}
+		//for query
 		for($k=0; $k<sizeof($termset_new_arr_arr); $k++){
 			//tf for query 
 			for($l=0; $l<sizeof($termset_new_arr_arr[$k]); $l++){
@@ -144,32 +174,64 @@
 		
 			//weight for query 
 			$tfidf_ft_query[$k]=number_format($tf_ft_query[$k]*$idf_ft[$k], 3, '.', ',');
-			if(sizeof($termset_new_arr_arr[$k]==1)){
-				$tfidf_ft1t_query[$k]=$tfidf_ft_query[$k];
-			}
 		}
 		echo "<b><li id='query_weight'>Query Weight</li></b>";
 	?>
-			<table border=1>
-				<thead>
-					<td>Terms</td>
-					<td>tf_query</td><td>idf</td><td>weight_query</td>
-				</thead>
-				<?php for($k=0,$n=1; $k<sizeof($termset_new_arr_arr); $k++,$n++){?>
-				<tr>
-					<td><?php echo $termset_new_arr_str[$k];?></td>
-					<td><?php echo $idf_ft[$k];?></td>
-					<td><?php echo $tf_ft_query[$k];?></td>
-					<td><?php echo $tfidf_ft_query[$k];?></td>
-				</tr>
-				<?php }?>
-			</table>
-			<br><br>
+		<table border=1>
+			<thead>
+				<td>Terms</td>
+				<td>tf_query</td><td>idf</td><td>weight_query</td>
+			</thead>
+			<?php for($k=0,$n=1; $k<sizeof($termset_new_arr_arr); $k++,$n++){?>
+			<tr>
+				<td><?php echo $termset_new_arr_str[$k];?></td>
+				<td><?php echo $tf_ft_query[$k];?></td>
+				<td><?php echo $idf_ft[$k];?></td>
+				<td><?php echo $tfidf_ft_query[$k];?></td>
+			</tr>
+			<?php }?>
+		</table>
+		<br><br>
+		<table border=1>
+			<thead>
+				<td>Terms</td>
+				<td>tf_1t_query</td><td>idf_1t</td><td>weight_1t_query</td>
+			</thead>
+			<?php for($k=0,$n=1; $k<sizeof($arr_unique_query); $k++,$n++){?>
+			<tr>
+				<td><?php echo $arr_unique_query[$k];?></td>
+				<td><?php echo $tf_ft1t_query[$k];?></td>
+				<td><?php echo $idf_ft1t[$k];?></td>
+				<td><?php echo $tfidf_ft1t_query[$k];?></td>
+			</tr>
+			<?php }?>
+		</table>
+		<br><br>
 	<?php
-		
-
+		//for doc
 		for($j=0,$no=1; $j<sizeof($doc_arr_str); $j++,$no++){
 			echo "<b><li id='doc".$no."'>Doc".$no."</li></b>";
+			//for 1t doc
+			for($k=0; $k<sizeof($arr_unique_query); $k++){
+				//tf for 1t doc 
+				$hz1t[$k]=0;
+				if(in_array($arr_unique_query[$k], $doc_arr_arr[$j])){
+					$tmp=array_count_values($doc_arr_arr[$j]);
+					$hz1t[$k]=$tmp[$arr_unique_query[$k]];
+				}
+				$freq_ft1t_doc[$j][$k]=$hz1t[$k];
+				if($freq_ft1t_doc[$j][$k]>0){
+					$tf_ft1t_doc[$j][$k]=number_format(1+log($freq_ft1t_doc[$j][$k],2), 3, '.', ',');
+				}
+				else{
+					$tf_ft1t_doc[$j][$k]=0;
+				}			
+
+				//weight for 1t doc 
+				$tfidf_ft1t_doc[$j][$k]=number_format($tf_ft1t_doc[$j][$k]*$idf_ft1t[$k], 3, '.', ',');
+
+			} 
+			//for doc
 			for($k=0; $k<sizeof($termset_new_arr_arr); $k++){
 				//tf for doc 
 				for($l=0; $l<sizeof($termset_new_arr_arr[$k]); $l++){
@@ -189,12 +251,8 @@
 
 				//weight for doc 
 				$tfidf_ft_doc[$j][$k]=number_format($tf_ft_doc[$j][$k]*$idf_ft[$k], 3, '.', ',');
-				if(sizeof($termset_new_arr_arr[$k]==1)){
-					$tfidf_ft1t_doc[$j][$k]=$tfidf_ft_doc[$j][$k];
-				}
-			} 
+			}
 	?>
-
 			<table border=1>
 				<thead>
 					<td>Number</td><td>Terms</td>
@@ -212,8 +270,23 @@
 			</table>
 			<br><br>
 
+			<table border=1>
+				<thead>
+					<td>Number</td><td>Terms</td>
+					<td>tf_1t_doc</td><td>idf_1t</td><td>weight_1t_doc</td>
+				</thead>
+				<?php for($k=0,$n=1; $k<sizeof($arr_unique_query); $k++,$n++){?>
+				<tr>
+					<td><?php echo $n;?></td>
+					<td><?php echo $arr_unique_query[$k];?></td>
+					<td><?php echo $tf_ft1t_doc[$j][$k];?></td>
+					<td><?php echo $idf_ft1t[$k];?></td>
+					<td><?php echo $tfidf_ft1t_doc[$j][$k];?></td>
+				</tr>
+				<?php }?>
+			</table>
+			<br><br>
 	<?php }
-		
 		echo "</ol><br>";
 		//store into session
 		$_SESSION['tf_ft_doc']=$tf_ft_doc;
