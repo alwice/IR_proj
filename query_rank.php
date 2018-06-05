@@ -7,15 +7,11 @@
 <body>
 	<a href="index.php">&nbsp;Home</a>&nbsp;&nbsp;>
 	<a href="query.php">&nbsp;Query TFIDF</a>&nbsp;&nbsp;>
-	<a href="queryrank.php">&nbsp;Query Rank</a>&nbsp;&nbsp;
+	<a href="query_rank.php">&nbsp;Query Rank</a>&nbsp;&nbsp;
 	<br><br>
 	<?php
 		//load session
 		$doc_arr_str=$_SESSION['doc_arr_str'];
-		$doc_arr_arr=$_SESSION['doc_arr_arr'];
-		$str_all=$_SESSION['str_all'];
-		$arr_terms=$_SESSION['arr_terms'];
-		$str_terms=$_SESSION['str_terms'];
 		$tfidf_query=$_SESSION['tfidf_query'];
 		$tfidf_doc=$_SESSION['tfidf_doc'];
 		$vector_unique_docquery=$_SESSION['vector_unique_docquery'];
@@ -32,7 +28,7 @@
 				$cross_product[$j]=sqrt($query_square[$j])*sqrt($doc_square[$j]);
 			}
 			//calculate the rank
-			$rank_compute[$j]=$dot_product[$j]/$cross_product[$j];
+			$rank_compute[$j]=number_format($dot_product[$j]/$cross_product[$j], 3, '.', ',');
 		}
 		arsort($rank_compute);
 	?>
@@ -46,7 +42,18 @@
 			<td>Doc<?php echo $doc+1;?></td>
 			<td><?php echo $comp;?></td>
 		</tr>
-		<?php }?>
+		<?php 
+			}
+			$rerank=array_values($rank_compute);
+			$redocument=array_keys($rank_compute);	
+			for($i=0;$i<sizeof($rank_compute);$i++){
+				$query_rank[$i][0]=$redocument[$i]+1;
+				$query_rank[$i][1]=$rerank[$i];
+			}
+			$_SESSION['query_ranking']=$query_rank;
+			$_SESSION['query_rank_value']=$rerank;
+			$_SESSION['query_rank_doc']=$redocument;
+		?>
 	</table>
 </body>
 </html>

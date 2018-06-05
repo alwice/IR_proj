@@ -29,14 +29,24 @@
 	<br>
 
 	<!--get 3words query&threshold-->
-	<fieldset><legend>Question 4</legend><form action="frequenttermset_tfidf.php" method="POST">
+	<fieldset><legend>Question 4</legend><form action="frequenttermset.php" method="POST">
 		<label>Query: </label>
-		<input type="text" name="query" placeholder="query1 query2 query3" required>
+		<input type="text" name="query" placeholder="query1 query2 query3">
 		<br><br>
-		<label>Threshold: </label><input type="number" name="threshold" placeholder="threshold">
+		<label>Threshold: </label><input type="number" name="threshold" placeholder="threshold" required>
 		<br><br>
 		<input type="submit" name="submit_ft" value="Submit">
 	</form></fieldset>
+
+	<!--get query&relevant doc-->
+	<fieldset><legend>Question 5</legend><form action="precision_recall.php" method="POST">
+		<label>Query: </label>
+		<input type="text" name="query" placeholder="query1 query2 query3">
+		<label>Relevant Documents: </label>
+		<input type="text" name="doc" placeholder="d1 d2 d3">
+		<input type="submit" name="submit_query" value="Submit">
+	</form></fieldset>
+	<br>
 	
 </body>
 </html>
