@@ -8,14 +8,12 @@
 	<a href="index.php">&nbsp;Home</a>&nbsp;&nbsp;>
 	<a href="precision_recall.php">&nbsp;Precision Recall</a>&nbsp;&nbsp;
 	<br><br>
-
+	<form aciton="" method="POST">
+		<button name="submit" type="submit" value="submit">Reset Relevant Document</button>
+	</form>
+	<br>
 	<?php
 		//load session
-		$doc_arr_str=$_SESSION['doc_arr_str'];
-		$arr_unique_query=$_SESSION['arr_unique_query'];
-		$arr_unique_doc=$_SESSION['arr_unique_doc'];
-		$query_ranking=$_SESSION['query_ranking'];
-		$query_rank_value=$_SESSION['query_rank_value'];
 		$query_rank_doc=$_SESSION['query_rank_doc'];
 		
 		//randomize relavant doc
@@ -24,42 +22,73 @@
 		
 		//catch relavant doc from user, else use session, else use random
 		$_SESSION['doc_relevant']=isset($_SESSION['doc_relevant'])?$_SESSION['doc_relevant']:$random_relevant;
-		$doc_relevant=isset($_POST['doc'])?$_POST['doc']:$_SESSION['doc_relevant'];
-		$_SESSION['doc_relevant']=$doc_relevant;
-		print_r($doc_relevant);
-		echo "<br><br>";
+		$doc_relevant_str=isset($_POST['doc'])?$_POST['doc']:NULL;
+		if($doc_relevant_str==NULL){
+			$doc_relevant_arr=$_SESSION['doc_relevant'];
+		}
+		else{
+			$doc_relevant_arr=explode(' ', $doc_relevant_str);
+		}
+		$_SESSION['doc_relevant']=$doc_relevant_arr;
 
 		//mark relevant
-		print_r($query_rank_doc);
-		echo "<br><br>";
 		$marking_doc_relevant=array(0,0,0,0,0,0,0,0,0,0);
-		for($k=0; $k<sizeof($doc_relevant); $k++){
+		for($k=0; $k<sizeof($doc_relevant_arr); $k++){
 			for($i=0; $i<sizeof($query_rank_doc); $i++){
-				if($query_rank_doc[$i]==$doc_relevant[$k]){
+				if($query_rank_doc[$i]==$doc_relevant_arr[$k]){
 					$marking_doc_relevant[$i]=1;
 				}
 			}
 		}
-		print_r($marking_doc_relevant);
-
-
-
-
-
-		/*$retrieved=count();
-		$precision=$rel_ret/$retrieved;
-		$relevant=sizeof($doc_relevant);
-		$recall=$rel_ret/$relevant;*/
+		$marked_relevant=array();
+		for($i=0; $i<sizeof($marking_doc_relevant); $i++){
+			$marked_relevant[$i][0]="d".$query_rank_doc[$i];
+			$marked_relevant[$i][1]=$marking_doc_relevant[$i];
+		}
+		
+		//calculate RnA
+		$rel_ret=0;
+		$retrieved=0;
+		for($i=0; $i<sizeof($marked_relevant); $i++){
+			if($marked_relevant[$i][1]==1){
+				$rel_ret++;
+			}
+			$retrieved++;
+			//calculate precision&recall
+			$precision[$i]=number_format($rel_ret/$retrieved, 3, '.', ',');;
+			$relevant=sizeof($doc_relevant_arr);
+			$recall[$i]=number_format($rel_ret/$relevant, 3, '.', ',');;
+		}
 	?>
-	<form aciton="" method="POST">
-		<button name="submit" type="submit" value="submit">Reset Relevant Document</button>
-	</form>
+	<table border=1>
+		<thead>
+			<td>Number</td>
+			<td>Document</td>
+			<td>Relevant Marking</td>
+			<td>Precision</td>
+			<td>Recall</td>
+		</thead>
+		<?php for($i=0; $i<sizeof($marked_relevant); $i++){?>
+		<tr>
+			<td><?php echo $i+1;?></td>
+			<td><?php echo $marked_relevant[$i][0];?></td>
+			<td><?php echo $marked_relevant[$i][1];?></td>
+			<td><?php echo $precision[$i];?></td>
+			<td><?php echo $recall[$i];?></td>
+		</tr>
+		<?php 
+			}
+			$_SESSION['marked_relevant']=$marked_relevant;
+			$_SESSION['precision']=$precision;
+			$_SESSION['recall']=$recall;
+		?>
+	</table>
 </body>
 </html>
 <?php
 	$reset=isset($_POST['submit'])?$_POST['submit']:NULL;
 	if($reset!=NULL){
-
 		unset($_SESSION['doc_relevant']);
+		echo "<script>location.href='index.php';</script>";
 	}
 ?>

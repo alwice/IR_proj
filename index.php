@@ -42,8 +42,10 @@
 	<fieldset><legend>Question 5</legend><form action="precision_recall.php" method="POST">
 		<label>Query: </label>
 		<input type="text" name="query" placeholder="query1 query2 query3">
+		<br><br>
 		<label>Relevant Documents: </label>
-		<input type="text" name="doc" placeholder="d1 d2 d3">
+		<input type="text" name="doc" placeholder="1 2 3">
+		<br><br>
 		<input type="submit" name="submit_query" value="Submit">
 	</form></fieldset>
 	<br>

@@ -46,13 +46,16 @@
 			}
 			$rerank=array_values($rank_compute);
 			$redocument=array_keys($rank_compute);	
+			for($i=0;$i<sizeof($redocument);$i++){
+				$doc_rank[$i]=$redocument[$i]+1;
+			}
 			for($i=0;$i<sizeof($rank_compute);$i++){
 				$query_rank[$i][0]=$redocument[$i]+1;
 				$query_rank[$i][1]=$rerank[$i];
 			}
 			$_SESSION['query_ranking']=$query_rank;
 			$_SESSION['query_rank_value']=$rerank;
-			$_SESSION['query_rank_doc']=$redocument;
+			$_SESSION['query_rank_doc']=$doc_rank;
 		?>
 	</table>
 </body>

@@ -73,5 +73,9 @@ $_SESSION['ft_ranking']
 $_SESSION['ft_rank_value']
 $_SESSION['ft_rank_doc']
 
-
+//precision&recall
+$_SESSION['doc_relevant']
+$_SESSION['precision']
+$_SESSION['recall']
+$_SESSION['marked_relevant']
 ?>
