@@ -36,16 +36,12 @@
 			$pattern1=array('/(\d)[,](\d)/', '/[,?!;:"\'\/()]/', '/[-]/', '/(\S?)[.](\S?)/', '/\s\s+/');
 			$replacement1=array('\1\2', '', ' ', '\1\2', ' ');
 			$str2=preg_replace($pattern1, $replacement1, $str1);
-/*			echo $str2;
-			echo '<br><br>';
-*/			
 
 			switch($f){
 				case 0://P1.pdf
 					$arr=explode(' ', $str2);
 					$arr[145]='kampung';
 					array_pop($arr);
-					//print_r($arr);
 					$str2=implode(' ', $arr);
 					break;
 				
@@ -54,7 +50,6 @@
 					$arr[117]='from';
 					$arr[206]='affected';
 					array_pop($arr);
-					//print_r($arr);
 					$str2=implode(' ', $arr);
 					break;
 
@@ -66,7 +61,6 @@
 					$arr[221]='important';
 					$arr[266]='bn';
 					array_pop($arr);
-					//print_r($arr);
 					$str2=implode(' ', $arr);
 					break;
 
@@ -76,7 +70,6 @@
 					$arr[65]='today';
 					$arr[111]='realised';
 					array_pop($arr);
-					//print_r($arr);
 					$str2=implode(' ', $arr);
 					break;
 
@@ -88,7 +81,6 @@
 					$arr[164]='peoples';
 					$arr[204]='throughout';
 					array_pop($arr);
-					//print_r($arr);
 					$str2=implode(' ', $arr);
 					break;
 
@@ -98,7 +90,6 @@
 					$arr[108]='four';
 					$arr[148]='volunteers';
 					array_pop($arr);
-					//print_r($arr);
 					$str2=implode(' ', $arr);
 					break;
 
@@ -108,7 +99,6 @@
 					$arr[86]='centre';
 					$arr[168]='director';
 					array_pop($arr);
-					//print_r($arr);
 					$str2=implode(' ', $arr);
 					break;
 
@@ -117,7 +107,6 @@
 					$arr[58]='after';
 					$arr[105]='expected';
 					array_pop($arr);
-					//print_r($arr);
 					$str2=implode(' ', $arr);
 					break;
 
@@ -132,25 +121,15 @@
 					$arr[236]='need';
 					$arr[277]='points';
 					array_pop($arr);
-					//print_r($arr);
 					$str2=implode(' ', $arr);
 					break;
-					//got space between 1 3 in P9.pdf
-					/*if($f==8){
-						$pattern2=array('/(\d+)\s(\d+)/');
-						$replacement2=array('\1\2');
-						$str2=preg_replace($pattern2, $replacement2, $str2);
-						echo $str2;
-						echo '<br><br>';
-					}*/
-
+				
 				case 9://P10.pdf
 					$arr=explode(' ', $str2);
 					$arr[37]='general';
 					$arr[119]='2014';
 					$arr[191]='gst';
 					array_pop($arr);
-					//print_r($arr);
 					$str2=implode(' ', $arr);
 					break;
 
@@ -163,31 +142,23 @@
 			$_SESSION['doc_arr_str'][$f]=$str2;
 			$_SESSION['doc_arr_arr'][$f]=explode(' ', $str2);
 			$str3=implode(' ',array_unique(explode(' ', $str2)));
-			//echo $str3;
-			//echo '<br><br>';
-
 			$files_process[$f]=$str3;
-/*			echo $files_process[$f];
-			echo '<br><br>';
-*/		}
+		}
 
 		//save all into individual term in an array
 		$str_all=implode(' ', $files_process);
 		$arr_prepare_terms=array_unique(explode(' ', $str_all));
 		$str_terms=implode(' ', $arr_prepare_terms);
 		$arr_terms=explode(' ', $str_terms);
-		//print_r($arr_terms);
 		
 		$_SESSION['str_all']=$str_all;
 		$_SESSION['arr_terms']=$arr_terms;
 		$_SESSION['str_terms']=$str_terms;
-		//asort($arr_terms);
-		//print_r($arr_terms);
 		for($i=0,$no=1; $i<sizeof($arr_terms); $i++,$no++){
 			echo $no."= ".$arr_terms[$i]."<br>";
 		}
 
-	//echo "<script>location.href='index.php';</script>";
+	echo "<script>location.href='tfidf.php';</script>";
 	?>
 </body>
 </html>

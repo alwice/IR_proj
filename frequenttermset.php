@@ -2,11 +2,11 @@
 <html>
 <head>
 	<?php include('menu.php');?>
-	<title>Frequent Termset Weight</title>
+	<title>Frequent Termset</title>
 </head>
 <body>
 	<a href="index.php">&nbsp;Home</a>&nbsp;&nbsp;>
-	<a href="frequenttermset.php">&nbsp;Frequent Termset Weight</a>&nbsp;&nbsp;
+	<a href="frequenttermset.php">&nbsp;Frequent Termset</a>&nbsp;&nbsp;
 	<br><br>
 	<button onclick="topFunction()" id="topBtn" title="Go to top">Top</button>
 	<ol><li><a href='#oritermset'>Original Termset</a></li>
@@ -17,6 +17,10 @@
 	</ol>
 	
 	<?php
+		//load session
+		$str_query=$_SESSION['str_query'];
+
+
 		//process query
 		$doc_arr_arr=$_SESSION['doc_arr_arr'];
 		$str_query=isset($_POST['query'])?$_POST['query']:$_SESSION['str_query'];
@@ -120,10 +124,12 @@
 			<td><?php echo $termset_new_arr_str[$i];?></td>
 			<td><?php for($k=0; $k<sizeof($termset_new_doc[$i]); $k++){ 
 				echo $termset_new_doc[$i][$k]." ";
+			//	$count_ft=$k;
 				}?></td>
 		</tr>
 		<?php }?>
 	</table>
+	<?php echo "There are ".$count_ft." Frequent Termsets.";?>
 	<br>	
 	
 	<?php 

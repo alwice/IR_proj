@@ -11,15 +11,9 @@
 	<div id="navigation">
 		<ul><b>	
 			<li><a href="index.php">Home</a></li>
-			<li>All Documents' Terms
-				<ul><li><a href="preprocess.php">Terms List</a></li>
-				<li><a href="tfidf.php">TFIDF</a></li></ul>
-			<li>Query
-				<ul><li><a href="query_tfidf.php">Query TFIDF</a></li>
-				<li><a href="query_rank.php">Query Rank</a></li></ul>
+			<li><a href="preprocess.php">All Documents' TFIDF</a></li>
+			<li><a href="query_tfidf.php">Query Rank</a></li>
 			<li><a href="frequenttermset.php">Frequent Termset</a>
-				<ul><li><a href="frequenttermset_tfidf.php">Frequent Termset Weight</a></li>
-				<li><a href="frequenttermset_rank.php">Frequent Termset Rank</a></li></ul>
 			<li><a href="precision_recall.php">Precision Recall</a>
 		</b></ul>
 	</div>

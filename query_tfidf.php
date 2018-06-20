@@ -115,7 +115,7 @@
 		$_SESSION['vector_unique_docquery']=$vector_unique_docquery;
 		echo "</ol>";
 
-		//echo "<script>location.href='query_rank.php';</script>";
+		echo "<script>location.href='query_rank.php';</script>";
 	?>
 </body>
 </html>

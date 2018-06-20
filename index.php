@@ -44,7 +44,7 @@
 		<input type="text" name="query" placeholder="query1 query2 query3">
 		<br><br>
 		<label>Relevant Documents: </label>
-		<input type="text" name="doc" placeholder="1 2 3">
+		<input type="text" name="doc" placeholder="1 2 3" title="will be random if left empty">
 		<br><br>
 		<input type="submit" name="submit_query" value="Submit">
 	</form></fieldset>
